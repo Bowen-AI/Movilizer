@@ -1,109 +1,125 @@
-# Personalized Generative Studio
+# Movilizer Generative Movie Studio
 
-A complete, local-first repository for:
-- SDXL identity LoRA training
-- batched multi-project image+video generation
-- dialogue voice + music mixing + final MP4 mux
-- modular judges (image/video/audio) + self-evolving loop
-- non-destructive shot tweaks via patch YAMLs
-- Slurm jobs for 2x80GB GPUs
-- natural-language AI command prompt interface (`studio.ai`)
+A local-first, server-capable repository for movie-grade generative production:
+- SDXL identity/style LoRA training,
+- batched multi-project image+video generation,
+- dialog voice + music + mix + final MP4 packaging,
+- modular judges and self-evolving optimization loops,
+- non-destructive scene/shot patch tweaks,
+- Slurm jobs (2x80GB GPUs),
+- natural-language AI command interface.
 
-## Features
+## What is available now
 
-- Workspace / project / scene / shot object model in YAML and JSON Schemas.
-- Deterministic compilation and caching using content hashes.
-- Incremental reruns: skip unchanged tasks, rerender frame ranges only.
-- Offline-capable baseline generation + optional heavy model integrations.
-- Full artifact provenance: config snapshots, git hash, model IDs, LoRA checksums.
+1. Local debug mode
+- Fast iteration profile via `configs/run/local_debug.yaml`.
+- Use low resolution/fps/steps while preserving pipeline behavior.
 
-## Quickstart
+2. Server mode
+- `studio.server` FastAPI app with endpoints for:
+  - run orchestration,
+  - AI plan/execute,
+  - model list/pull/push.
+
+3. Model retrieval and publishing
+- Pull from local path or Hugging Face repo into local model cache.
+- Push from local model folder to local path or Hugging Face repo.
+- CLI: `python -m studio.model_registry ...`
+
+4. Generic movie project baseline
+- `projects/feature_film_demo` is the default movie-oriented sample.
+- Previous sample (`my_makeover`) remains available as legacy reference.
+
+5. Multi prompt-image/video references
+- Supported across workspace/project/scene/shot levels.
+- Also supported via `shot.references.prompt_images[]` and `shot.references.prompt_videos[]`.
+
+## Local setup (conda)
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
+conda env create -f environment.yml
+conda activate movilizer
 pip install -e .
 ```
 
-### 1) Run full studio pipeline
+## Quickstart
+
+### 1) Local debug run
 
 ```bash
-python -m studio.run --workspace workspace.yaml --projects all --scenes all
+python -m studio.run \
+  --workspace workspace.yaml \
+  --run_config configs/run/local_debug.yaml \
+  --projects feature_film_demo \
+  --scenes all \
+  --resume
 ```
 
-### 2) Compile only
+### 2) Full-quality run profile
 
 ```bash
-python -m studio.run --workspace workspace.yaml --project my_makeover --scene scene_01 --compile_only
+python -m studio.run --workspace workspace.yaml --projects feature_film_demo --scenes all --resume
 ```
 
-### 3) Apply tweak patch and rerun a scene
+### 3) Compile only
 
 ```bash
-python -m studio.run --workspace workspace.yaml --project my_makeover --scene scene_01 \
-  --patch projects/my_makeover/scripts/scenes/patches/scene_01.patch.001.yaml
+python -m studio.run --workspace workspace.yaml --project feature_film_demo --scene scene_001_opening --compile_only
 ```
 
-### 4) Natural-language command interface
+### 4) AI command prompt interface
 
 ```bash
-python -m studio.ai "Make scene_01 shot_03 more cinematic, reduce makeup, keep identity strong; regenerate only frames 120-220"
-python -m studio.ai --interactive
+python -m studio.ai --workspace workspace.yaml --project feature_film_demo --scene scene_001_opening \
+  "make shot_001 more cinematic and regenerate frames 48-120"
 ```
 
-### 5) Train identity LoRA
+### 5) Model registry sync
 
 ```bash
-python -m studio.train_identity --config configs/train/sdxl_lora.yaml
+# Pull model from HF to local cache
+python -m studio.model_registry pull --source stabilityai/stable-diffusion-xl-base-1.0
+
+# Push local model folder to HF repo
+python -m studio.model_registry push --source_dir models/cache/stabilityai__stable-diffusion-xl-base-1.0 --target your-org/your-model
+
+# Push local model folder to local destination
+python -m studio.model_registry push --source_dir models/cache/stabilityai__stable-diffusion-xl-base-1.0 --target /tmp/model_export
 ```
 
-### 6) Evaluate outputs
+### 6) Server mode
 
 ```bash
-python -m studio.eval --workspace workspace.yaml --run_id <run_id>
+python -m studio.server --config configs/server/default.yaml
 ```
 
-### 7) Evolve prompts/params
+Example requests:
 
 ```bash
-python -m studio.evolve --workspace workspace.yaml --projects my_makeover --budget small
+curl http://127.0.0.1:8080/health
+
+curl -X POST http://127.0.0.1:8080/models/pull \
+  -H 'content-type: application/json' \
+  -d '{"source":"stabilityai/stable-diffusion-xl-base-1.0"}'
+
+curl -X POST http://127.0.0.1:8080/run \
+  -H 'content-type: application/json' \
+  -d '{"projects":["feature_film_demo"],"scenes":["scene_001_opening"],"run_config":"configs/run/local_debug.yaml"}'
 ```
 
-## Add A New Project
+## Output layout
 
-1. Copy `projects/my_makeover/` to `projects/<new_name>/`.
-2. Edit `projects/<new_name>/project.yaml`.
-3. Add scene YAMLs in `projects/<new_name>/scripts/scenes/`.
-4. Add dialog YAMLs in `projects/<new_name>/scripts/dialogs/`.
-5. Register the project in `workspace.yaml`.
+- Shot: `outputs/<run_id>/<project>/<scene>/<shot>/...`
+- Scene: `outputs/<run_id>/<project>/<scene>/scene.mp4`
+- Project final: `outputs/<run_id>/<project>/final.mp4`
+- Eval: `outputs/eval/<run_id>/...`
 
-## Write A Scene + Dialogs
-
-- Scene: `projects/<name>/scripts/scenes/<scene>.yaml`
-- Dialog: `projects/<name>/scripts/dialogs/<dialog>.yaml`
-
-See examples in `docs/AI/EXAMPLES/` and human docs in `docs/HUMAN/SCENES.md`.
-
-## Produce final.mp4 With Voices + Music
-
-```bash
-python -m studio.run --workspace workspace.yaml --project my_makeover --scene scene_01 scene_02
-```
-
-Final outputs:
-- `outputs/<run_id>/my_makeover/scene_01/scene.mp4`
-- `outputs/<run_id>/my_makeover/scene_02/scene.mp4`
-- `outputs/<run_id>/my_makeover/final.mp4`
-
-## Slurm (2 GPUs)
+## Slurm
 
 - `slurm/train_identity_2gpu.sbatch`
 - `slurm/run_studio_2gpu.sbatch`
 - `slurm/eval.sbatch`
 - `slurm/evolve.sbatch`
-
-See `docs/HUMAN/SLURM.md`.
 
 ## Documentation
 
@@ -113,6 +129,7 @@ Human docs:
 - `docs/HUMAN/TWEAKS.md`
 - `docs/HUMAN/PIPELINE.md`
 - `docs/HUMAN/SLURM.md`
+- `docs/HUMAN/SERVER.md`
 - `docs/HUMAN/AUDIO.md`
 - `docs/HUMAN/VIDEO.md`
 - `docs/HUMAN/JUDGES.md`
@@ -125,12 +142,10 @@ AI docs:
 - `docs/AI/COMMANDS.md`
 - `docs/AI/EXAMPLES/`
 
-## Graceful Fallback Strategy
+## Graceful fallback behavior
 
-If heavy dependencies (diffusers/torch/insightface/ffmpeg) are unavailable:
-- generation falls back to lightweight synthetic frame renderer,
-- training falls back to mock LoRA checkpoint generation,
-- advanced judges fall back to heuristic metrics,
-- clear warnings are logged with installation guidance.
-
-This keeps the repo runnable end-to-end while allowing upgrade to full GPU workflows.
+When optional components are unavailable:
+- generation uses synthetic frame fallback,
+- training uses mock LoRA artifact fallback,
+- advanced judges stay heuristic,
+- server/model sync endpoints return actionable failure messages.

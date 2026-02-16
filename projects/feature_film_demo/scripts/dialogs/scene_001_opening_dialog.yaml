@@ -1,0 +1,16 @@
+scene: "scene_001_opening"
+sample_rate: 24000
+speakers:
+  narrator:
+    voice_profile: "projects/feature_film_demo/assets/audio/voices/narrator/profile.yaml"
+lines:
+  - line_id: "l1"
+    speaker: "narrator"
+    start_sec: 0.5
+    end_sec: 2.6
+    text: "In this city, everyone runs from something."
+  - line_id: "l2"
+    speaker: "narrator"
+    start_sec: 3.0
+    end_sec: 5.5
+    text: "Tonight, the truth is the one thing gaining ground."

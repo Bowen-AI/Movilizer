@@ -22,8 +22,9 @@ PROJECTS=${PROJECTS:-all}
 SCENES=${SCENES:-all}
 RUN_ID=${RUN_ID:-""}
 RESUME_FLAG=${RESUME_FLAG:-1}
+RUN_CONFIG=${RUN_CONFIG:-configs/run/default_run.yaml}
 
-CMD=(python -m studio.run --workspace "${WORKSPACE_PATH}")
+CMD=(python -m studio.run --workspace "${WORKSPACE_PATH}" --run_config "${RUN_CONFIG}")
 
 if [[ "${PROJECTS}" == "all" ]]; then
   CMD+=(--projects all)

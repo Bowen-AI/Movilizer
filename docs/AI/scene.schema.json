@@ -14,6 +14,13 @@
         "negative_prompt": {"type": "string"}
       }
     },
+    "prompt_media": {
+      "type": "object",
+      "properties": {
+        "images": {"type": "array", "items": {"type": "string"}},
+        "videos": {"type": "array", "items": {"type": "string"}}
+      }
+    },
     "location_refs": {"type": "array", "items": {"type": "string"}},
     "wardrobe_refs": {"type": "array", "items": {"type": "string"}},
     "dialog_ref": {"type": "string"},
@@ -66,6 +73,13 @@
             }
           },
           "references": {"type": "object"},
+          "prompt_media": {
+            "type": "object",
+            "properties": {
+              "images": {"type": "array", "items": {"type": "string"}},
+              "videos": {"type": "array", "items": {"type": "string"}}
+            }
+          },
           "actors": {"type": "array", "items": {"type": "string"}}
         }
       }

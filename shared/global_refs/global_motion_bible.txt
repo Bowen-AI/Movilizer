@@ -1,0 +1,1 @@
+Global motion bible: camera intent motivated by story beats; avoid jitter unless diegetic.

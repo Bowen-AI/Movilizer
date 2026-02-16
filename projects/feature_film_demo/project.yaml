@@ -1,0 +1,63 @@
+project_name: "feature_film_demo"
+description: "Generic cinematic movie workflow demo with multi-character references."
+
+identity_packs:
+  - path: "data/identities/lead_actor"
+    weight: 1.0
+
+model:
+  base_id: "stabilityai/stable-diffusion-xl-base-1.0"
+  refiner_id: "stabilityai/stable-diffusion-xl-refiner-1.0"
+  base_source: "stabilityai/stable-diffusion-xl-base-1.0"
+  refiner_source: "stabilityai/stable-diffusion-xl-refiner-1.0"
+  use_refiner: false
+  precision: "bf16"
+  enable_xformers: true
+  attention_slicing: true
+  model_sources:
+    - name: "storyboard_adapter"
+      source: "./shared/adapters/storyboard_adapter"
+      local_files_only: true
+  loras:
+    - path: "outputs/train/lead_actor_lora/final_lora.safetensors"
+      scale: 0.7
+
+style_bible:
+  vibe_guidelines:
+    - "feature-film composition and continuity"
+    - "identity fidelity across shots"
+    - "cinematic lighting motivated by scene context"
+  forbidden:
+    - "over-saturated skin retouching"
+    - "non-diegetic visual clutter"
+
+safety_policy:
+  nsfw_filter: true
+  disallow_minors: true
+  violence_level: "moderate"
+
+output_specs:
+  resolution: [1280, 720]
+  fps: 24
+  loudness_target_lufs: -16
+
+shared_refs:
+  prompt_library: "shared/prompt_library.yaml"
+  asset_packs:
+    - "urban_night"
+
+assets:
+  identity_folders:
+    - "data/identities/lead_actor"
+  asset_folders:
+    - "projects/feature_film_demo/assets"
+
+prompt_media:
+  images:
+    - "projects/feature_film_demo/assets/refs/lookbook_main.txt"
+  videos:
+    - "projects/feature_film_demo/assets/refs/blocking_reel.txt"
+
+scene_files:
+  - "projects/feature_film_demo/scripts/scenes/scene_001_opening.yaml"
+  - "projects/feature_film_demo/scripts/scenes/scene_002_dialog.yaml"

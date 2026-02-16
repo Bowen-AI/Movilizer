@@ -4,9 +4,10 @@
 commands:
   - name: run
     module: studio.run
-    usage: "python -m studio.run --workspace <path> [--projects all|<p...>] [--scenes all|<s...>]"
+    usage: "python -m studio.run --workspace <path> [--run_config <path>] [--projects all|<p...>] [--scenes all|<s...>]"
     flags:
       - {name: --workspace, type: str, required: true}
+      - {name: --run_config, type: path, required: false}
       - {name: --projects, type: list[str], required: false}
       - {name: --project, type: str, required: false}
       - {name: --scenes, type: list[str], required: false}
@@ -18,7 +19,32 @@ commands:
       - {name: --resume, type: bool, required: false}
       - {name: --compile_only, type: bool, required: false}
       - {name: --skip_eval, type: bool, required: false}
+      - {name: --ensure_models, type: bool, required: false}
       - {name: --run_id, type: str, required: false}
+
+  - name: server
+    module: studio.server
+    usage: "python -m studio.server --config configs/server/default.yaml"
+    flags:
+      - {name: --config, type: path, required: false}
+      - {name: --host, type: str, required: false}
+      - {name: --port, type: int, required: false}
+
+  - name: model_registry
+    module: studio.model_registry
+    usage: "python -m studio.model_registry <pull|push|list> ..."
+    subcommands:
+      - name: pull
+        flags:
+          - {name: --source, type: str, required: true}
+          - {name: --revision, type: str, required: false}
+          - {name: --local_files_only, type: bool, required: false}
+      - name: push
+        flags:
+          - {name: --source_dir, type: path, required: true}
+          - {name: --target, type: str, required: true}
+          - {name: --private, type: bool, required: false}
+      - name: list
 
   - name: train_identity
     module: studio.train_identity
@@ -86,5 +112,5 @@ commands:
 
   - name: tools.dataset_report
     module: studio.tools.dataset_report
-    usage: "python -m studio.tools.dataset_report --dataset_root data/my_identity"
+    usage: "python -m studio.tools.dataset_report --dataset_root data/identities/lead_actor"
 ```

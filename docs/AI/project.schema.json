@@ -24,11 +24,28 @@
       "properties": {
         "base_id": {"type": "string"},
         "refiner_id": {"type": "string"},
+        "base_source": {"type": "string"},
+        "refiner_source": {"type": "string"},
+        "base_revision": {"type": ["string", "null"]},
+        "refiner_revision": {"type": ["string", "null"]},
         "fast_base_id": {"type": "string"},
         "use_refiner": {"type": "boolean"},
         "precision": {"enum": ["fp16", "bf16"]},
         "enable_xformers": {"type": "boolean"},
         "attention_slicing": {"type": "boolean"},
+        "model_sources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "source"],
+            "properties": {
+              "name": {"type": "string"},
+              "source": {"type": "string"},
+              "revision": {"type": ["string", "null"]},
+              "local_files_only": {"type": "boolean"}
+            }
+          }
+        },
         "loras": {
           "type": "array",
           "items": {
@@ -70,6 +87,13 @@
       "properties": {
         "identity_folders": {"type": "array", "items": {"type": "string"}},
         "asset_folders": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "prompt_media": {
+      "type": "object",
+      "properties": {
+        "images": {"type": "array", "items": {"type": "string"}},
+        "videos": {"type": "array", "items": {"type": "string"}}
       }
     },
     "scene_files": {"type": "array", "items": {"type": "string"}}

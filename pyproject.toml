@@ -3,14 +3,25 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "personalized-generative-studio"
-version = "0.1.0"
-description = "Personalized generative studio: SDXL LoRA training, multi-project generation, audio/video production, evaluation, and AI command interface"
+name = "movilizer-studio"
+version = "0.2.0"
+description = "Movilizer generative movie studio: local debug + server orchestration, model sync, training, generation, evaluation, and AI command control"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
 authors = [{name = "Codex"}]
-dependencies = []
+dependencies = [
+  "PyYAML>=6.0",
+  "Jinja2>=3.1",
+  "jsonschema>=4.20",
+  "numpy>=1.24",
+  "Pillow>=10.0",
+]
+
+[project.optional-dependencies]
+server = ["fastapi>=0.115", "uvicorn>=0.30", "pydantic>=2.7"]
+models = ["huggingface_hub>=0.24"]
+ml = ["torch>=2.1", "diffusers>=0.27", "accelerate>=0.27", "transformers>=4.38"]
 
 [tool.setuptools]
 package-dir = {"" = "src"}

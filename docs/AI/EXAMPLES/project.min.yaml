@@ -1,7 +1,11 @@
-project_name: "my_makeover"
+project_name: "feature_film_demo"
 model:
   base_id: "stabilityai/stable-diffusion-xl-base-1.0"
+  base_source: "stabilityai/stable-diffusion-xl-base-1.0"
 output_specs:
-  resolution: [1024, 1024]
+  resolution: [1280, 720]
   fps: 24
   loudness_target_lufs: -16
+prompt_media:
+  images: ["projects/feature_film_demo/assets/refs/lookbook_main.txt"]
+  videos: ["projects/feature_film_demo/assets/refs/blocking_reel.txt"]

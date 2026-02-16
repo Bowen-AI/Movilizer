@@ -1,8 +1,8 @@
 target:
-  project: "my_makeover"
-  scene: "scene_01"
-  shot: "shot_01"
+  project: "feature_film_demo"
+  scene: "scene_001_opening"
+  shot: "shot_001"
 ops:
   - op: "replace_prompt"
-    find: "portrait"
-    replace: "cinematic portrait"
+    find: "street"
+    replace: "rain-soaked street"

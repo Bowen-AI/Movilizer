@@ -1,7 +1,7 @@
-scene: "scene_01"
+scene: "scene_001_opening"
 lines:
   - line_id: "l1"
     speaker: "narrator"
     start_sec: 0.0
     end_sec: 1.0
-    text: "Hello world"
+    text: "The city never sleeps."

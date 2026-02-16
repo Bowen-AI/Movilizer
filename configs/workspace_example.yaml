@@ -1,8 +1,9 @@
-workspace_name: "studio_workspace"
+workspace_name: "movie_workspace"
 output_root: "outputs"
 shared_prompt_library: "shared/prompt_library.yaml"
 shared_asset_packs:
   - "shared/asset_packs.yaml"
+
 global_defaults:
   seed: 1337
   run_settings:
@@ -16,16 +17,31 @@ global_defaults:
     precision: "bf16"
     enable_xformers: true
     attention_slicing: true
+
 global_guidelines:
-  prompt: "cinematic, balanced composition, realistic textures"
-  negative_prompt: "deformed, lowres, oversmoothed"
+  prompt: "cinematic movie frame, spatial continuity, grounded realism"
+  negative_prompt: "deformed anatomy, broken perspective, unstable lighting"
+
+model_registry:
+  cache_root: "models/cache"
+  auto_pull: false
+
+prompt_media:
+  images:
+    - "shared/global_refs/global_color_bible.txt"
+  videos:
+    - "shared/global_refs/global_motion_bible.txt"
+
 projects:
-  - name: "my_makeover"
-    path: "projects/my_makeover/project.yaml"
+  - name: "feature_film_demo"
+    path: "projects/feature_film_demo/project.yaml"
+
 selection:
-  default_projects: ["my_makeover"]
-  default_scenes: ["scene_01"]
+  default_projects: ["feature_film_demo"]
+  default_scenes: ["scene_001_opening"]
+
 identity_folders:
-  - "data/my_identity"
+  - "data/identities/lead_actor"
+
 asset_folders:
-  - "projects/my_makeover/assets"
+  - "projects/feature_film_demo/assets"

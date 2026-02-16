@@ -1,5 +1,5 @@
-run_name: "my_identity_sdxl_lora"
-output_dir: "outputs/train/my_identity_sdxl_lora"
+run_name: "lead_actor_sdxl_lora"
+output_dir: "outputs/train/lead_actor_lora"
 resume_from: null
 seed: 42
 
@@ -19,7 +19,7 @@ lora:
   train_text_encoder: false
 
 train:
-  dataset_root: "data/my_identity"
+  dataset_root: "data/identities/lead_actor"
   image_size: 1024
   train_batch_size: 1
   gradient_accumulation_steps: 4

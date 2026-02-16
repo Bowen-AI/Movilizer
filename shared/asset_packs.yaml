@@ -1,8 +1,12 @@
 asset_packs:
   - name: "urban_night"
     images:
-      - "projects/my_makeover/assets/refs/rainy_street_ref.txt"
+      - "projects/feature_film_demo/assets/refs/rainy_alley.txt"
     tags: ["neon", "city", "rain"]
+  - name: "warehouse_tension"
+    images:
+      - "projects/feature_film_demo/assets/refs/warehouse_floor.txt"
+    tags: ["warehouse", "dialog", "tension"]
   - name: "wardrobe_modern"
     images:
       - "projects/my_makeover/assets/refs/wardrobe_modern_ref.txt"

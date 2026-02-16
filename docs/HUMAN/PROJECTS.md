@@ -2,12 +2,18 @@
 
 Each project lives under `projects/<name>/` and must include `project.yaml`.
 
-Required sections:
-- `identity_packs`: one or more data folders.
-- `model`: base SDXL model + optional refiner + LoRAs.
-- `style_bible`: vibe and guardrails.
-- `safety_policy`: constraints and filters.
-- `output_specs`: resolution, fps, target loudness.
-- `scene_files`: explicit scene YAML references.
+Use movie-generic naming and avoid personal hardcoding in prompts/configs.
 
-Use `workspace.yaml` to register the project and to select runs across many projects.
+Required sections:
+- `identity_packs`: one or more identity datasets.
+- `model`: base/refiner source IDs + optional `model_sources` and LoRAs.
+- `style_bible`: cinematic vibe and continuity rules.
+- `safety_policy`: generation constraints.
+- `output_specs`: resolution/fps/loudness.
+- `scene_files`: explicit scene YAML paths.
+
+Optional sections:
+- `prompt_media.images[]` and `prompt_media.videos[]`
+- `assets.identity_folders[]` and `assets.asset_folders[]`
+
+`workspace.yaml` can register multiple projects and run them in one batch.

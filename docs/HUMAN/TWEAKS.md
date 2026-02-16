@@ -10,6 +10,7 @@ Supported operations:
 
 Examples:
 ```bash
-python -m studio.tweak --workspace workspace.yaml --project my_makeover --scene scene_01 --create_patch_template
-python -m studio.tweak --workspace workspace.yaml --project my_makeover --scene scene_01 --shot shot_03 --apply_inline "replace_prompt: 'straight hair' -> 'wavy hair'"
+python -m studio.tweak --workspace workspace.yaml --project feature_film_demo --scene scene_001_opening --create_patch_template
+python -m studio.tweak --workspace workspace.yaml --project feature_film_demo --scene scene_001_opening --shot shot_001 --apply_inline "replace_prompt: 'street' -> 'rain-soaked street'"
+python -m studio.run --workspace workspace.yaml --project feature_film_demo --scene scene_001_opening --patch projects/feature_film_demo/scripts/scenes/patches/scene_001_opening.patch.001.yaml
 ```

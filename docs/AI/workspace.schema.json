@@ -38,6 +38,20 @@
         "negative_prompt": {"type": "string"}
       }
     },
+    "model_registry": {
+      "type": "object",
+      "properties": {
+        "cache_root": {"type": "string"},
+        "auto_pull": {"type": "boolean"}
+      }
+    },
+    "prompt_media": {
+      "type": "object",
+      "properties": {
+        "images": {"type": "array", "items": {"type": "string"}},
+        "videos": {"type": "array", "items": {"type": "string"}}
+      }
+    },
     "projects": {
       "type": "array",
       "items": {

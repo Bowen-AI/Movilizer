@@ -239,6 +239,44 @@ def _prompt_for_frame(base_prompt: str, prompt_schedule: list[dict[str, Any]], f
     return base_prompt
 
 
+def _listify(value: Any) -> list[Any]:
+    if value is None:
+        return []
+    if isinstance(value, list):
+        return value
+    return [value]
+
+
+def _merge_prompt_media(
+    workspace: dict[str, Any],
+    project_data: dict[str, Any],
+    scene_data: dict[str, Any],
+    shot_data: dict[str, Any],
+) -> dict[str, list[str]]:
+    merged = {"images": [], "videos": []}
+
+    for source in [
+        workspace.get("prompt_media", {}),
+        project_data.get("prompt_media", {}),
+        scene_data.get("prompt_media", {}),
+        shot_data.get("prompt_media", {}),
+    ]:
+        if not isinstance(source, dict):
+            continue
+        merged["images"].extend(str(x) for x in _listify(source.get("images")) if x)
+        merged["videos"].extend(str(x) for x in _listify(source.get("videos")) if x)
+
+    refs = shot_data.get("references", {})
+    if isinstance(refs, dict):
+        merged["images"].extend(str(x) for x in _listify(refs.get("prompt_images")) if x)
+        merged["videos"].extend(str(x) for x in _listify(refs.get("prompt_videos")) if x)
+
+    # keep stable ordering while deduplicating
+    merged["images"] = list(dict.fromkeys(merged["images"]))
+    merged["videos"] = list(dict.fromkeys(merged["videos"]))
+    return merged
+
+
 def compile_scene(
     workspace: dict[str, Any],
     project: LoadedProject,
@@ -319,6 +357,14 @@ def compile_scene(
                 ops=ops,
             )
 
+        prompt_media = _merge_prompt_media(
+            workspace=workspace,
+            project_data=project.data,
+            scene_data=shot_scene,
+            shot_data=shot,
+        )
+        shot["prompt_media"] = prompt_media
+
         out_dir = output_root / run_id / project.name / scene_name / shot_id
         compiled_dir = out_dir / "compiled"
         ensure_dir(compiled_dir)
@@ -371,6 +417,7 @@ def compile_scene(
             "patches": [p["path"] for p in target_patches],
             "frame_count": frame_count,
             "frame_range": list(frame_range) if frame_range else None,
+            "prompt_media": prompt_media,
             "provenance": provenance,
         }
         visual_hash = stable_hash(
@@ -379,6 +426,7 @@ def compile_scene(
                 "prompt": prompt,
                 "negative": negative,
                 "refs": shot.get("references", {}),
+                "prompt_media": prompt_media,
                 "generation": shot.get("generation", {}),
             }
         )
@@ -468,7 +516,8 @@ def execute_compiled_scene(
         return
 
     ws_dir = Path(workspace["_workspace_dir"])
-    run_generation_cfg = workspace.get("global_defaults", {}).get("run_settings", {})
+    run_cfg = workspace.get("_run_config", {}) if isinstance(workspace.get("_run_config", {}), dict) else {}
+    run_generation_cfg = run_cfg.get("generation", workspace.get("global_defaults", {}).get("run_settings", {}))
     model_cfg_data = project.data.get("model", workspace.get("global_defaults", {}).get("model", {}))
 
     diff_cfg = DiffusionConfig(
@@ -524,10 +573,18 @@ def execute_compiled_scene(
             logger.info("Generating %s frames for %s/%s/%s", len(frame_indices), compiled.project, compiled.scene, compiled.shot_id)
             prompt_schedule = compiled.shot_data.get("generation", {}).get("prompt_schedule", [])
             refs = compiled.shot_data.get("references", {})
+            prompt_media = compiled.shot_data.get("prompt_media", {"images": [], "videos": []})
 
             for frame_idx in frame_indices:
                 prompt_frame = _prompt_for_frame(compiled.compiled_prompt, prompt_schedule, frame_idx)
-                gen_kwargs = ref_adapter.apply({}, refs)
+                gen_kwargs = ref_adapter.apply(
+                    {},
+                    {
+                        "references": refs,
+                        "prompt_media": prompt_media,
+                        "actors": compiled.shot_data.get("actors", []),
+                    },
+                )
                 generator.generate_frame(
                     prompt=prompt_frame,
                     negative_prompt=compiled.compiled_negative_prompt,
@@ -571,6 +628,7 @@ def execute_compiled_scene(
             "frame_count": compiled.frame_count,
             "frame_range": list(compiled.frame_range) if compiled.frame_range else None,
             "references": compiled.shot_data.get("references", {}),
+            "prompt_media": compiled.shot_data.get("prompt_media", {"images": [], "videos": []}),
             "generation": compiled.shot_data.get("generation", {}),
             "provenance": {
                 "git_hash": get_git_hash(),

@@ -1,9 +1,16 @@
-scene_name: "scene_01"
+scene_name: "scene_001_opening"
+prompt_media:
+  images: ["projects/feature_film_demo/assets/refs/scene001_keyart.txt"]
 shots:
-  - shot_id: "shot_01"
+  - shot_id: "shot_001"
     duration: 3
     fps: 24
-    resolution: [1024, 1024]
-    prompt: "<me> portrait"
+    resolution: [1280, 720]
+    prompt: "<lead_actor> enters frame"
     generation:
       method: "image_only"
+    references:
+      prompt_images:
+        - "projects/feature_film_demo/assets/refs/shot001_refA.txt"
+      prompt_videos:
+        - "projects/feature_film_demo/assets/refs/shot001_motion_ref.txt"

@@ -1,8 +1,9 @@
-workspace_name: "default_workspace"
+workspace_name: "movilizer_movie_workspace"
 output_root: "outputs"
 shared_prompt_library: "shared/prompt_library.yaml"
 shared_asset_packs:
   - "shared/asset_packs.yaml"
+
 global_defaults:
   seed: 42
   run_settings:
@@ -16,16 +17,35 @@ global_defaults:
     precision: "bf16"
     enable_xformers: true
     attention_slicing: true
+
 global_guidelines:
-  prompt: "high quality cinematic portrait, coherent anatomy, natural skin texture"
-  negative_prompt: "blurry, distorted face, extra fingers, low quality artifacts"
+  prompt: "feature film visual language, coherent anatomy, realistic texture, character continuity"
+  negative_prompt: "distorted face, low quality, duplicated limbs, frame tearing"
+
+model_registry:
+  cache_root: "models/cache"
+  auto_pull: false
+
+prompt_media:
+  images:
+    - "shared/global_refs/global_color_bible.txt"
+  videos:
+    - "shared/global_refs/global_motion_bible.txt"
+
 projects:
+  - name: "feature_film_demo"
+    path: "projects/feature_film_demo/project.yaml"
   - name: "my_makeover"
     path: "projects/my_makeover/project.yaml"
+
 selection:
-  default_projects: ["my_makeover"]
-  default_scenes: ["scene_01", "scene_02"]
+  default_projects: ["feature_film_demo"]
+  default_scenes: ["scene_001_opening", "scene_002_dialog"]
+
 identity_folders:
+  - "data/identities/lead_actor"
   - "data/my_identity"
+
 asset_folders:
+  - "projects/feature_film_demo/assets"
   - "projects/my_makeover/assets"

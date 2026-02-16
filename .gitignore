@@ -15,3 +15,5 @@ logs/
 *.safetensors
 *.ckpt
 .DS_Store
+models/cache/
+*.wav

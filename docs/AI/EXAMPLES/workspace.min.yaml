@@ -1,5 +1,8 @@
-workspace_name: "demo"
+workspace_name: "movie_demo"
 output_root: "outputs"
+model_registry:
+  cache_root: "models/cache"
+  auto_pull: false
 projects:
-  - name: "my_makeover"
-    path: "projects/my_makeover/project.yaml"
+  - name: "feature_film_demo"
+    path: "projects/feature_film_demo/project.yaml"

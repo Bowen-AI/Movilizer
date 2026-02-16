@@ -16,7 +16,7 @@ export NCCL_SOCKET_IFNAME=${NCCL_SOCKET_IFNAME:-"^lo,docker0"}
 export PYTHONUNBUFFERED=1
 
 WORKSPACE_PATH=${WORKSPACE_PATH:-workspace.yaml}
-PROJECTS=${PROJECTS:-my_makeover}
+PROJECTS=${PROJECTS:-feature_film_demo}
 BUDGET=${BUDGET:-small}
 RESUME_FLAG=${RESUME_FLAG:-1}
 

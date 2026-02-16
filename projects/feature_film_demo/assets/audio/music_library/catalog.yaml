@@ -1,0 +1,5 @@
+tracks:
+  - path: "projects/feature_film_demo/assets/audio/music_library/score_tension.wav"
+    tags: ["tense", "cinematic", "dialog"]
+  - path: "projects/feature_film_demo/assets/audio/music_library/score_chase.wav"
+    tags: ["chase", "rain", "city", "cinematic"]

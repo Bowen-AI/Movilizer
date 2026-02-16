@@ -1,12 +1,12 @@
 global_templates:
-  cinematic_portrait: |
+  cinematic_movie_shot: |
     {{subject}} in {{location}}, {{lighting}}, {{camera}}, {{lens}},
-    cinematic composition, rich detail, realistic skin, subtle film grain
-  fashion_editorial: |
-    {{subject}} wearing {{wardrobe}}, {{location}}, editorial style,
-    controlled highlights, premium makeup, sharp focus
+    filmic composition, narrative continuity, realistic texturing, controlled motion blur
+  character_dialogue: |
+    {{subject}} delivering dialogue in {{location}}, {{lighting}},
+    emotional nuance, consistent identity, cinematic framing
 negative_templates:
-  base_negative: "deformed anatomy, warped face, blurry, lowres, jpeg artifacts"
+  base_negative: "deformed anatomy, unstable identity, low detail, noisy compression"
 vibe_words:
-  neon_rain: ["rain-soaked streets", "neon reflections", "night city haze"]
-  clean_daylight: ["soft daylight", "natural color", "gentle contrast"]
+  chase_night: ["rain-soaked streets", "urgency", "neon reflections"]
+  tense_dialog: ["high tension", "focused eye-lines", "motivated practical lighting"]

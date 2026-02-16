@@ -9,7 +9,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Studio umbrella CLI")
     parser.add_argument(
         "command",
-        choices=["run", "train_identity", "eval", "evolve", "tweak", "ai"],
+        choices=["run", "train_identity", "eval", "evolve", "tweak", "ai", "server", "model_registry"],
         help="Subcommand to execute",
     )
     parser.add_argument("args", nargs=argparse.REMAINDER)

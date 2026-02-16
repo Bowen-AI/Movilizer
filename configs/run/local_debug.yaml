@@ -1,0 +1,32 @@
+seed: 7
+resume: true
+dry_run: false
+compile_only: false
+save_intermediate: true
+
+local_debug:
+  enabled: true
+  max_fps: 12
+  resolution: [640, 360]
+  duration_scale: 0.4
+  max_frames_per_shot: 36
+  max_inference_steps: 12
+
+generation:
+  num_inference_steps: 12
+  guidance_scale: 5.8
+  eta: 0.0
+  seed_lock_across_frames: true
+  anchor_frames: [0]
+  prompt_schedule: []
+
+audio:
+  target_lufs: -16
+  ducking_db: -8
+  fade_in_sec: 0.2
+  fade_out_sec: 0.2
+  sample_rate: 22050
+
+evaluation:
+  enabled: true
+  profile: "default"

@@ -1,0 +1,12 @@
+target:
+  project: "feature_film_demo"
+  scene: "scene_001_opening"
+  shot: "shot_001"
+ops:
+  - op: "add_prompt_suffix"
+    text: ", stronger anamorphic flare and motivated backlight"
+  - op: "set"
+    path: "generation.guidance_scale"
+    value: 6.9
+  - op: "set_frame_range"
+    value: [48, 120]

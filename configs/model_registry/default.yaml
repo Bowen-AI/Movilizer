@@ -1,0 +1,3 @@
+cache_root: "models/cache"
+default_source: "stabilityai/stable-diffusion-xl-base-1.0"
+default_revision: null

@@ -1,0 +1,77 @@
+scene_name: "scene_001_opening"
+scene_title: "Opening Chase"
+vibe_overrides:
+  prompt: "rainy downtown night chase, realistic cinematic grading"
+  negative_prompt: "anime style, beauty filter"
+prompt_media:
+  images:
+    - "projects/feature_film_demo/assets/refs/scene001_keyart.txt"
+  videos:
+    - "projects/feature_film_demo/assets/refs/scene001_previz.txt"
+location_refs:
+  - "projects/feature_film_demo/assets/refs/rainy_alley.txt"
+wardrobe_refs:
+  - "projects/feature_film_demo/assets/refs/wardrobe_detective.txt"
+dialog_ref: "projects/feature_film_demo/scripts/dialogs/scene_001_opening_dialog.yaml"
+
+shots:
+  - shot_id: "shot_001"
+    duration: 4.0
+    fps: 24
+    resolution: [1280, 720]
+    camera: "wide establishing crane"
+    lens: "28mm"
+    lighting: "wet asphalt reflections and sodium-vapor practicals"
+    prompt: "<lead_actor> exits the subway and scans the street"
+    negative_prompt: "glamour beauty closeup"
+    generation:
+      method: "keyframes_to_video"
+      seed: 4101
+      num_inference_steps: 34
+      guidance_scale: 6.5
+      anchor_frames: [0, 48]
+      prompt_schedule:
+        - frame: 0
+          prompt_suffix: "crowd movement and rain streaks"
+        - frame: 36
+          prompt_suffix: "increasing urgency"
+    references:
+      pose: "projects/feature_film_demo/assets/refs/pose_scan_street.txt"
+      wardrobe: "projects/feature_film_demo/assets/refs/wardrobe_detective.txt"
+      background: "projects/feature_film_demo/assets/refs/rainy_alley.txt"
+      prompt_images:
+        - "projects/feature_film_demo/assets/refs/shot001_refA.txt"
+        - "projects/feature_film_demo/assets/refs/shot001_refB.txt"
+      prompt_videos:
+        - "projects/feature_film_demo/assets/refs/shot001_motion_ref.txt"
+    prompt_media:
+      images:
+        - "projects/feature_film_demo/assets/refs/shot001_extra_look.txt"
+      videos:
+        - "projects/feature_film_demo/assets/refs/shot001_extra_motion.txt"
+    actors: ["<lead_actor>"]
+
+  - shot_id: "shot_002"
+    duration: 5.0
+    fps: 24
+    resolution: [1280, 720]
+    camera: "handheld medium tracking"
+    lens: "50mm"
+    lighting: "police light bounce and practical storefronts"
+    prompt: "<lead_actor> runs through alley and looks back"
+    negative_prompt: "motion freeze"
+    generation:
+      method: "video_plugin"
+      plugin: "native_video_stub"
+      seed: 4102
+      num_inference_steps: 30
+      guidance_scale: 6.2
+    references:
+      pose: "projects/feature_film_demo/assets/refs/pose_run.txt"
+      wardrobe: "projects/feature_film_demo/assets/refs/wardrobe_detective.txt"
+      background: "projects/feature_film_demo/assets/refs/rainy_alley.txt"
+      prompt_images:
+        - "projects/feature_film_demo/assets/refs/shot002_refA.txt"
+      prompt_videos:
+        - "projects/feature_film_demo/assets/refs/shot002_motion_ref.txt"
+    actors: ["<lead_actor>"]

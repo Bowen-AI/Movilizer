@@ -1,0 +1,36 @@
+scene_name: "scene_002_dialog"
+scene_title: "Warehouse Dialogue"
+vibe_overrides:
+  prompt: "tense warehouse confrontation, dramatic practical lighting"
+  negative_prompt: "flat stage look"
+prompt_media:
+  images:
+    - "projects/feature_film_demo/assets/refs/scene002_keyart.txt"
+location_refs:
+  - "projects/feature_film_demo/assets/refs/warehouse_floor.txt"
+wardrobe_refs:
+  - "projects/feature_film_demo/assets/refs/wardrobe_detective.txt"
+dialog_ref: "projects/feature_film_demo/scripts/dialogs/scene_002_dialog_dialog.yaml"
+
+shots:
+  - shot_id: "shot_001"
+    duration: 6.0
+    fps: 24
+    resolution: [1280, 720]
+    camera: "over-shoulder alternating setup"
+    lens: "65mm"
+    lighting: "single overhead practical with haze"
+    prompt: "<lead_actor> confronts antagonist with controlled emotion"
+    negative_prompt: "soap-opera mood"
+    generation:
+      method: "image_only"
+      seed: 4201
+      num_inference_steps: 32
+      guidance_scale: 6.8
+    references:
+      pose: "projects/feature_film_demo/assets/refs/pose_confrontation.txt"
+      background: "projects/feature_film_demo/assets/refs/warehouse_floor.txt"
+      prompt_images:
+        - "projects/feature_film_demo/assets/refs/scene002_shot001_refA.txt"
+        - "projects/feature_film_demo/assets/refs/scene002_shot001_refB.txt"
+    actors: ["<lead_actor>", "<antagonist>"]
