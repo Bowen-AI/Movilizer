@@ -1,0 +1,9 @@
+asset_packs:
+  - name: "urban_night"
+    images:
+      - "projects/my_makeover/assets/refs/rainy_street_ref.txt"
+    tags: ["neon", "city", "rain"]
+  - name: "wardrobe_modern"
+    images:
+      - "projects/my_makeover/assets/refs/wardrobe_modern_ref.txt"
+    tags: ["fashion", "modern"]

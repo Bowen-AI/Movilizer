@@ -1,0 +1,5 @@
+tracks:
+  - path: "projects/my_makeover/assets/audio/music_library/track_neon.wav"
+    tags: ["neon", "rain", "cinematic"]
+  - path: "projects/my_makeover/assets/audio/music_library/track_studio.wav"
+    tags: ["clean", "daylight", "modern"]

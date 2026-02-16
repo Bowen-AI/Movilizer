@@ -1,0 +1,11 @@
+scene: "scene_02"
+sample_rate: 24000
+speakers:
+  narrator:
+    voice_profile: "projects/my_makeover/assets/audio/voices/narrator/profile.yaml"
+lines:
+  - line_id: "l1"
+    speaker: "narrator"
+    start_sec: 0.4
+    end_sec: 2.6
+    text: "In daylight, confidence is just clarity with better posture."

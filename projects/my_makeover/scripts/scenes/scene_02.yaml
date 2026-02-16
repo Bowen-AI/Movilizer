@@ -1,0 +1,31 @@
+scene_name: "scene_02"
+scene_title: "Studio Confidence Segment"
+vibe_overrides:
+  prompt: "clean daylight studio, soft modern style"
+  negative_prompt: "muddy tones"
+location_refs:
+  - "projects/my_makeover/assets/refs/studio_ref.txt"
+wardrobe_refs:
+  - "projects/my_makeover/assets/refs/wardrobe_modern_ref.txt"
+dialog_ref: "projects/my_makeover/scripts/dialogs/scene_02_dialog.yaml"
+
+shots:
+  - shot_id: "shot_01"
+    duration: 4.0
+    fps: 24
+    resolution: [1024, 1024]
+    camera: "medium portrait static"
+    lens: "50mm"
+    lighting: "soft box key + fill"
+    prompt: "<me> speaks to camera in bright studio"
+    negative_prompt: "crushed blacks"
+    generation:
+      method: "image_only"
+      seed: 201
+      num_inference_steps: 28
+      guidance_scale: 6.0
+    references:
+      pose: "projects/my_makeover/assets/refs/pose_speak_ref.txt"
+      wardrobe: "projects/my_makeover/assets/refs/wardrobe_modern_ref.txt"
+      background: "projects/my_makeover/assets/refs/studio_ref.txt"
+    actors: ["<me>"]

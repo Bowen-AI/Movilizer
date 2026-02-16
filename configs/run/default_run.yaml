@@ -1,0 +1,24 @@
+seed: 42
+resume: true
+dry_run: false
+compile_only: false
+save_intermediate: true
+
+generation:
+  num_inference_steps: 30
+  guidance_scale: 6.5
+  eta: 0.0
+  seed_lock_across_frames: true
+  anchor_frames: [0]
+  prompt_schedule: []
+
+audio:
+  target_lufs: -16
+  ducking_db: -8
+  fade_in_sec: 0.4
+  fade_out_sec: 0.6
+  sample_rate: 24000
+
+evaluation:
+  enabled: true
+  profile: "default"

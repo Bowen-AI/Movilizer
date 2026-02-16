@@ -1,0 +1,12 @@
+backend: "rules" # rules | llm
+workspace: "workspace.yaml"
+llm:
+  enabled: false
+  endpoint: "http://localhost:8000/v1/chat/completions"
+  model: "gpt-4o-mini"
+  api_key_env: "OPENAI_API_KEY"
+execution:
+  require_confirm: true
+  dry_run_default: false
+patch:
+  auto_dir: "scripts/scenes/patches"

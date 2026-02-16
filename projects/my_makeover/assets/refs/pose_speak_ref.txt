@@ -1,0 +1,1 @@
+Reference pose: direct-to-camera speaking posture.

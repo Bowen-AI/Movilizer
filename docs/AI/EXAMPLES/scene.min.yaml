@@ -1,0 +1,9 @@
+scene_name: "scene_01"
+shots:
+  - shot_id: "shot_01"
+    duration: 3
+    fps: 24
+    resolution: [1024, 1024]
+    prompt: "<me> portrait"
+    generation:
+      method: "image_only"

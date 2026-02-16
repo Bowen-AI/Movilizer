@@ -1,0 +1,12 @@
+global_templates:
+  cinematic_portrait: |
+    {{subject}} in {{location}}, {{lighting}}, {{camera}}, {{lens}},
+    cinematic composition, rich detail, realistic skin, subtle film grain
+  fashion_editorial: |
+    {{subject}} wearing {{wardrobe}}, {{location}}, editorial style,
+    controlled highlights, premium makeup, sharp focus
+negative_templates:
+  base_negative: "deformed anatomy, warped face, blurry, lowres, jpeg artifacts"
+vibe_words:
+  neon_rain: ["rain-soaked streets", "neon reflections", "night city haze"]
+  clean_daylight: ["soft daylight", "natural color", "gentle contrast"]

@@ -1,0 +1,4 @@
+speaker_id: "narrator"
+style: "calm_confident"
+baseline_pitch_hz: 160
+use_prerecorded_if_available: true

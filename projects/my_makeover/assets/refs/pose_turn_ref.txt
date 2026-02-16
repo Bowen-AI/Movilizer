@@ -1,0 +1,1 @@
+Reference pose: head turn toward camera, smooth transition.

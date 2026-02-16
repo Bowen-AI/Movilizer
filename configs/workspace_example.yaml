@@ -1,0 +1,31 @@
+workspace_name: "studio_workspace"
+output_root: "outputs"
+shared_prompt_library: "shared/prompt_library.yaml"
+shared_asset_packs:
+  - "shared/asset_packs.yaml"
+global_defaults:
+  seed: 1337
+  run_settings:
+    batch_size: 1
+    resume: true
+  model:
+    base_id: "stabilityai/stable-diffusion-xl-base-1.0"
+    refiner_id: "stabilityai/stable-diffusion-xl-refiner-1.0"
+    fast_base_id: "your-org/fast-sdxl-placeholder"
+    use_refiner: false
+    precision: "bf16"
+    enable_xformers: true
+    attention_slicing: true
+global_guidelines:
+  prompt: "cinematic, balanced composition, realistic textures"
+  negative_prompt: "deformed, lowres, oversmoothed"
+projects:
+  - name: "my_makeover"
+    path: "projects/my_makeover/project.yaml"
+selection:
+  default_projects: ["my_makeover"]
+  default_scenes: ["scene_01"]
+identity_folders:
+  - "data/my_identity"
+asset_folders:
+  - "projects/my_makeover/assets"

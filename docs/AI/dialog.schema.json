@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "dialog.schema.json",
+  "title": "DialogScript",
+  "type": "object",
+  "required": ["scene", "lines"],
+  "properties": {
+    "scene": {"type": "string"},
+    "sample_rate": {"type": "integer"},
+    "speakers": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "voice_profile": {"type": "string"}
+        }
+      }
+    },
+    "lines": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["line_id", "speaker", "start_sec", "end_sec", "text"],
+        "properties": {
+          "line_id": {"type": "string"},
+          "speaker": {"type": "string"},
+          "start_sec": {"type": "number"},
+          "end_sec": {"type": "number"},
+          "text": {"type": "string"}
+        }
+      }
+    }
+  },
+  "additionalProperties": true
+}

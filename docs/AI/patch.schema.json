@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "patch.schema.json",
+  "title": "ScenePatch",
+  "type": "object",
+  "required": ["target", "ops"],
+  "properties": {
+    "target": {
+      "type": "object",
+      "required": ["project", "scene"],
+      "properties": {
+        "project": {"type": "string"},
+        "scene": {"type": "string"},
+        "shot": {"type": ["string", "null"]}
+      }
+    },
+    "ops": {
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "object",
+            "required": ["op", "path", "value"],
+            "properties": {
+              "op": {"const": "set"},
+              "path": {"type": "string"},
+              "value": {}
+            }
+          },
+          {
+            "type": "object",
+            "required": ["op", "path"],
+            "properties": {
+              "op": {"const": "delete"},
+              "path": {"type": "string"}
+            }
+          },
+          {
+            "type": "object",
+            "required": ["op", "path", "value"],
+            "properties": {
+              "op": {"const": "append"},
+              "path": {"type": "string"},
+              "value": {}
+            }
+          },
+          {
+            "type": "object",
+            "required": ["op", "path", "values"],
+            "properties": {
+              "op": {"const": "extend"},
+              "path": {"type": "string"},
+              "values": {"type": "array"}
+            }
+          },
+          {
+            "type": "object",
+            "required": ["op", "find", "replace"],
+            "properties": {
+              "op": {"const": "replace_prompt"},
+              "find": {"type": "string"},
+              "replace": {"type": "string"}
+            }
+          },
+          {
+            "type": "object",
+            "required": ["op", "text"],
+            "properties": {
+              "op": {"enum": ["add_prompt_prefix", "add_prompt_suffix", "add_negative_prefix", "add_negative_suffix"]},
+              "text": {"type": "string"}
+            }
+          },
+          {
+            "type": "object",
+            "required": ["op", "ref_path_key", "value"],
+            "properties": {
+              "op": {"const": "set_ref"},
+              "ref_path_key": {"type": "string"},
+              "value": {}
+            }
+          },
+          {
+            "type": "object",
+            "required": ["op", "value"],
+            "properties": {
+              "op": {"const": "set_frame_range"},
+              "value": {
+                "oneOf": [
+                  {
+                    "type": "array",
+                    "items": {"type": "integer"},
+                    "minItems": 2,
+                    "maxItems": 2
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "start": {"type": "integer"},
+                      "end": {"type": "integer"}
+                    }
+                  },
+                  {"type": "string"}
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": ["op", "speaker", "line_id", "text"],
+            "properties": {
+              "op": {"const": "set_dialog_text"},
+              "speaker": {"type": "string"},
+              "line_id": {"type": "string"},
+              "text": {"type": "string"}
+            }
+          },
+          {
+            "type": "object",
+            "required": ["op", "line_id", "delta_seconds"],
+            "properties": {
+              "op": {"const": "shift_dialog_time"},
+              "line_id": {"type": "string"},
+              "delta_seconds": {"type": "number"}
+            }
+          },
+          {
+            "type": "object",
+            "required": ["op", "track_path"],
+            "properties": {
+              "op": {"const": "replace_music"},
+              "track_path": {"type": "string"}
+            }
+          }
+        ]
+      }
+    }
+  },
+  "additionalProperties": false
+}

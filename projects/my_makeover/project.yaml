@@ -1,0 +1,53 @@
+project_name: "my_makeover"
+description: "Personal brand makeover with cinematic portrait scenes."
+
+identity_packs:
+  - path: "data/my_identity"
+    weight: 1.0
+
+model:
+  base_id: "stabilityai/stable-diffusion-xl-base-1.0"
+  refiner_id: "stabilityai/stable-diffusion-xl-refiner-1.0"
+  fast_base_id: "your-org/fast-sdxl-placeholder"
+  use_refiner: false
+  precision: "bf16"
+  enable_xformers: true
+  attention_slicing: true
+  loras:
+    - path: "outputs/train/my_identity_sdxl_lora/final_lora.safetensors"
+      scale: 0.8
+
+style_bible:
+  vibe_guidelines:
+    - "identity fidelity is top priority"
+    - "cinematic framing with realistic skin texture"
+    - "avoid over-retouching"
+  forbidden:
+    - "excessive makeup"
+    - "cartoon style"
+
+safety_policy:
+  nsfw_filter: true
+  disallow_minors: true
+  violence_level: "low"
+
+output_specs:
+  resolution: [1024, 1024]
+  fps: 24
+  loudness_target_lufs: -16
+
+shared_refs:
+  prompt_library: "shared/prompt_library.yaml"
+  asset_packs:
+    - "urban_night"
+    - "wardrobe_modern"
+
+assets:
+  identity_folders:
+    - "data/my_identity"
+  asset_folders:
+    - "projects/my_makeover/assets"
+
+scene_files:
+  - "projects/my_makeover/scripts/scenes/scene_01.yaml"
+  - "projects/my_makeover/scripts/scenes/scene_02.yaml"

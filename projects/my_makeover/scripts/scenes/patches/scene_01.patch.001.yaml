@@ -1,0 +1,17 @@
+target:
+  project: "my_makeover"
+  scene: "scene_01"
+  shot: "shot_03"
+ops:
+  - op: "replace_prompt"
+    find: "cinematic city depth"
+    replace: "cinematic city depth with stronger identity preservation"
+  - op: "add_prompt_suffix"
+    text: ", rainy neon reflections, subtle wind motion"
+  - op: "add_negative_suffix"
+    text: ", overdone makeup"
+  - op: "set"
+    path: "generation.guidance_scale"
+    value: 6.8
+  - op: "set_frame_range"
+    value: [120, 220]

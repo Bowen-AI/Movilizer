@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "scene.schema.json",
+  "title": "SceneConfig",
+  "type": "object",
+  "required": ["scene_name", "shots"],
+  "properties": {
+    "scene_name": {"type": "string"},
+    "scene_title": {"type": "string"},
+    "vibe_overrides": {
+      "type": "object",
+      "properties": {
+        "prompt": {"type": "string"},
+        "negative_prompt": {"type": "string"}
+      }
+    },
+    "location_refs": {"type": "array", "items": {"type": "string"}},
+    "wardrobe_refs": {"type": "array", "items": {"type": "string"}},
+    "dialog_ref": {"type": "string"},
+    "shots": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["shot_id", "duration", "fps", "resolution", "prompt", "generation"],
+        "properties": {
+          "shot_id": {"type": "string"},
+          "duration": {"type": "number"},
+          "fps": {"type": "integer"},
+          "resolution": {
+            "type": "array",
+            "items": {"type": "integer"},
+            "minItems": 2,
+            "maxItems": 2
+          },
+          "camera": {"type": "string"},
+          "lens": {"type": "string"},
+          "lighting": {"type": "string"},
+          "prompt": {"type": "string"},
+          "negative_prompt": {"type": "string"},
+          "generation": {
+            "type": "object",
+            "required": ["method"],
+            "properties": {
+              "method": {"enum": ["image_only", "keyframes_to_video", "video_plugin"]},
+              "plugin": {"type": "string"},
+              "seed": {"type": "integer"},
+              "num_inference_steps": {"type": "integer"},
+              "guidance_scale": {"type": "number"},
+              "anchor_frames": {"type": "array", "items": {"type": "integer"}},
+              "prompt_schedule": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "frame": {"type": "integer"},
+                    "prompt_suffix": {"type": "string"}
+                  }
+                }
+              },
+              "frame_range": {
+                "type": "array",
+                "items": {"type": "integer"},
+                "minItems": 2,
+                "maxItems": 2
+              }
+            }
+          },
+          "references": {"type": "object"},
+          "actors": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    }
+  },
+  "additionalProperties": true
+}

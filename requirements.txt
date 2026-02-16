@@ -1,0 +1,20 @@
+PyYAML>=6.0
+Jinja2>=3.1
+jsonschema>=4.20
+numpy>=1.24
+Pillow>=10.0
+soundfile>=0.12
+scipy>=1.10
+optuna>=3.6
+tqdm>=4.66
+
+# Optional heavy dependencies (graceful fallback if missing)
+torch>=2.1
+diffusers>=0.27
+accelerate>=0.27
+transformers>=4.38
+xformers>=0.0.25
+insightface>=0.7
+facenet-pytorch>=2.5
+lpips>=0.1
+open_clip_torch>=2.24

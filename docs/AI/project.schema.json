@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "project.schema.json",
+  "title": "ProjectConfig",
+  "type": "object",
+  "required": ["project_name", "model", "output_specs"],
+  "properties": {
+    "project_name": {"type": "string"},
+    "description": {"type": "string"},
+    "identity_packs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path"],
+        "properties": {
+          "path": {"type": "string"},
+          "weight": {"type": "number"}
+        }
+      }
+    },
+    "model": {
+      "type": "object",
+      "required": ["base_id"],
+      "properties": {
+        "base_id": {"type": "string"},
+        "refiner_id": {"type": "string"},
+        "fast_base_id": {"type": "string"},
+        "use_refiner": {"type": "boolean"},
+        "precision": {"enum": ["fp16", "bf16"]},
+        "enable_xformers": {"type": "boolean"},
+        "attention_slicing": {"type": "boolean"},
+        "loras": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["path"],
+            "properties": {
+              "path": {"type": "string"},
+              "scale": {"type": "number"}
+            }
+          }
+        }
+      }
+    },
+    "style_bible": {
+      "type": "object",
+      "properties": {
+        "vibe_guidelines": {"type": "array", "items": {"type": "string"}},
+        "forbidden": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "safety_policy": {"type": "object"},
+    "output_specs": {
+      "type": "object",
+      "required": ["resolution", "fps", "loudness_target_lufs"],
+      "properties": {
+        "resolution": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {"type": "integer"}
+        },
+        "fps": {"type": "integer"},
+        "loudness_target_lufs": {"type": "number"}
+      }
+    },
+    "shared_refs": {"type": "object"},
+    "assets": {
+      "type": "object",
+      "properties": {
+        "identity_folders": {"type": "array", "items": {"type": "string"}},
+        "asset_folders": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "scene_files": {"type": "array", "items": {"type": "string"}}
+  },
+  "additionalProperties": true
+}

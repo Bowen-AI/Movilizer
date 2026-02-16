@@ -1,0 +1,79 @@
+scene_name: "scene_01"
+scene_title: "Rainy Neon Street Intro"
+vibe_overrides:
+  prompt: "rainy neon city mood, cinematic contrast"
+  negative_prompt: "heavy makeup"
+location_refs:
+  - "projects/my_makeover/assets/refs/rainy_street_ref.txt"
+wardrobe_refs:
+  - "projects/my_makeover/assets/refs/wardrobe_modern_ref.txt"
+dialog_ref: "projects/my_makeover/scripts/dialogs/scene_01_dialog.yaml"
+
+shots:
+  - shot_id: "shot_01"
+    duration: 3.5
+    fps: 24
+    resolution: [1024, 1024]
+    camera: "medium shot, slow dolly in"
+    lens: "50mm"
+    lighting: "neon backlight with rain highlights"
+    prompt: "<me> stands under neon sign, subtle confident expression"
+    negative_prompt: "plastic skin"
+    generation:
+      method: "image_only"
+      seed: 101
+      num_inference_steps: 30
+      guidance_scale: 6.5
+    references:
+      pose: "projects/my_makeover/assets/refs/pose_stand_ref.txt"
+      wardrobe: "projects/my_makeover/assets/refs/wardrobe_modern_ref.txt"
+      background: "projects/my_makeover/assets/refs/rainy_street_ref.txt"
+      moodboard: "projects/my_makeover/assets/refs/moodboard_neon_ref.txt"
+    actors: ["<me>"]
+
+  - shot_id: "shot_02"
+    duration: 4.0
+    fps: 24
+    resolution: [1024, 1024]
+    camera: "close-up, handheld subtle motion"
+    lens: "85mm"
+    lighting: "key light from storefront"
+    prompt: "<me> turns toward camera, soft smile, raindrops on jacket"
+    negative_prompt: "harsh shadows"
+    generation:
+      method: "keyframes_to_video"
+      seed: 102
+      num_inference_steps: 32
+      guidance_scale: 7.0
+      anchor_frames: [0, 48]
+      prompt_schedule:
+        - frame: 0
+          prompt_suffix: "intro expression"
+        - frame: 48
+          prompt_suffix: "warmer smile"
+    references:
+      pose: "projects/my_makeover/assets/refs/pose_turn_ref.txt"
+      wardrobe: "projects/my_makeover/assets/refs/wardrobe_modern_ref.txt"
+      background: "projects/my_makeover/assets/refs/rainy_street_ref.txt"
+    actors: ["<me>"]
+
+  - shot_id: "shot_03"
+    duration: 5.0
+    fps: 24
+    resolution: [1024, 1024]
+    camera: "wide shot with tracking"
+    lens: "35mm"
+    lighting: "neon reflections, wet ground"
+    prompt: "<me> walks forward, cinematic city depth"
+    negative_prompt: "over-sharpening"
+    generation:
+      method: "video_plugin"
+      plugin: "native_video_stub"
+      seed: 103
+      num_inference_steps: 28
+      guidance_scale: 6.2
+    references:
+      pose: "projects/my_makeover/assets/refs/pose_walk_ref.txt"
+      wardrobe: "projects/my_makeover/assets/refs/wardrobe_modern_ref.txt"
+      background: "projects/my_makeover/assets/refs/rainy_street_ref.txt"
+    actors: ["<me>"]

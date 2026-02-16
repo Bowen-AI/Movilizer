@@ -1,0 +1,42 @@
+run_name: "my_identity_sdxl_lora"
+output_dir: "outputs/train/my_identity_sdxl_lora"
+resume_from: null
+seed: 42
+
+model:
+  base_id: "stabilityai/stable-diffusion-xl-base-1.0"
+  refiner_id: "stabilityai/stable-diffusion-xl-refiner-1.0"
+  use_refiner: false
+  precision: "bf16"
+  enable_xformers: true
+  attention_slicing: true
+
+lora:
+  rank: 16
+  alpha: 32
+  dropout: 0.05
+  target_modules: ["to_q", "to_k", "to_v", "to_out", "ff.net"]
+  train_text_encoder: false
+
+train:
+  dataset_root: "data/my_identity"
+  image_size: 1024
+  train_batch_size: 1
+  gradient_accumulation_steps: 4
+  gradient_checkpointing: true
+  learning_rate: 1.0e-4
+  max_train_steps: 200
+  save_every_steps: 50
+  sample_every_steps: 50
+  num_workers: 2
+  use_8bit_adam: false
+
+regularization:
+  enabled: false
+  weight: 1.0
+
+distributed:
+  num_processes: 2
+  mixed_precision: "bf16"
+
+notes: "If diffusers/accelerate are missing, trainer will generate a mock LoRA artifact and sample renders."

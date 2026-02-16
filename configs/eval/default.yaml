@@ -1,0 +1,37 @@
+judges:
+  image:
+    identity_similarity:
+      enabled: true
+      weight: 0.35
+    prompt_adherence:
+      enabled: true
+      weight: 0.2
+    quality:
+      enabled: true
+      weight: 0.2
+    diversity:
+      enabled: true
+      weight: 0.1
+    safety:
+      enabled: true
+      weight: 0.15
+  video:
+    temporal_identity_consistency:
+      enabled: true
+      weight: 0.5
+    clip_stability:
+      enabled: true
+      weight: 0.3
+    flicker:
+      enabled: true
+      weight: 0.2
+  audio:
+    loudness:
+      enabled: true
+      weight: 0.7
+    clipping:
+      enabled: true
+      weight: 0.3
+output:
+  write_leaderboard: true
+  write_per_shot: true

@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "workspace.schema.json",
+  "title": "WorkspaceConfig",
+  "type": "object",
+  "required": ["workspace_name", "output_root", "projects"],
+  "properties": {
+    "workspace_name": {"type": "string"},
+    "output_root": {"type": "string"},
+    "shared_prompt_library": {"type": "string"},
+    "shared_asset_packs": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "global_defaults": {
+      "type": "object",
+      "properties": {
+        "seed": {"type": "integer"},
+        "run_settings": {"type": "object"},
+        "model": {
+          "type": "object",
+          "properties": {
+            "base_id": {"type": "string"},
+            "refiner_id": {"type": "string"},
+            "fast_base_id": {"type": "string"},
+            "use_refiner": {"type": "boolean"},
+            "precision": {"enum": ["fp16", "bf16"]},
+            "enable_xformers": {"type": "boolean"},
+            "attention_slicing": {"type": "boolean"}
+          }
+        }
+      }
+    },
+    "global_guidelines": {
+      "type": "object",
+      "properties": {
+        "prompt": {"type": "string"},
+        "negative_prompt": {"type": "string"}
+      }
+    },
+    "projects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "path"],
+        "properties": {
+          "name": {"type": "string"},
+          "path": {"type": "string"}
+        }
+      }
+    },
+    "selection": {
+      "type": "object",
+      "properties": {
+        "default_projects": {"type": "array", "items": {"type": "string"}},
+        "default_scenes": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "identity_folders": {"type": "array", "items": {"type": "string"}},
+    "asset_folders": {"type": "array", "items": {"type": "string"}}
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,7 @@
+scene: "scene_01"
+lines:
+  - line_id: "l1"
+    speaker: "narrator"
+    start_sec: 0.0
+    end_sec: 1.0
+    text: "Hello world"

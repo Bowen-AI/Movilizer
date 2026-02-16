@@ -1,0 +1,25 @@
+mode: "weighted_sum" # weighted_sum | pareto
+budget: "small" # small | medium | large
+trials:
+  small: 8
+  medium: 24
+  large: 64
+
+search_space:
+  cfg_scale: [4.5, 9.0]
+  steps: [20, 45]
+  prompt_mutations:
+    - "cinematic lighting"
+    - "natural skin texture"
+    - "subtle film grain"
+    - "dramatic backlight"
+  negative_mutations:
+    - "plastic skin"
+    - "overexposed highlights"
+
+constraints:
+  min_identity_similarity: 0.7
+  max_flicker: 0.4
+
+resume: true
+snapshot_dir: "outputs/evolve"

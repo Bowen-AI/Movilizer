@@ -1,0 +1,5 @@
+workspace_name: "demo"
+output_root: "outputs"
+projects:
+  - name: "my_makeover"
+    path: "projects/my_makeover/project.yaml"
