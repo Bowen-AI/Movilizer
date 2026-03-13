@@ -1,0 +1,261 @@
+================================================================================
+MOVILIZER GPU SYSTEM - QUICK REFERENCE
+================================================================================
+
+DISCOVER GPUs
+─────────────────────────────────────────────────────────────────────────────
+from src.studio.gpu import GPUDiscovery
+
+discovery = GPUDiscovery()
+gpus = discovery.get_gpus()
+
+for gpu in gpus:
+    print(f"GPU {gpu.index}: {gpu.name}, {gpu.vram_total_gb}GB, "
+          f"Free: {gpu.vram_free_gb}GB, Temp: {gpu.temperature_c}°C")
+
+ALLOCATE TO SINGLE GPU
+─────────────────────────────────────────────────────────────────────────────
+from src.studio.gpu import GPUAllocator, ModelType
+
+allocator = GPUAllocator()
+allocation = allocator.allocate(
+    task_id="my-task",
+    model_type=ModelType.SDXL_BASE,
+    gpus=gpus,
+)
+
+print(f"Allocated to GPUs: {allocation.gpu_indices}")
+
+PLAN MULTI-TASK ALLOCATION
+─────────────────────────────────────────────────────────────────────────────
+plan = allocator.plan_allocations(
+    tasks=[
+        ("task-1", ModelType.SDXL_BASE, None),
+        ("task-2", ModelType.CLIP_VISION, None),
+        ("task-3", ModelType.UPSCALER, 2.0),  # Custom VRAM
+    ],
+    gpus=gpus,
+)
+
+if plan.is_feasible():
+    print(f"Success! {len(plan.allocations)} tasks allocated")
+else:
+    for task_id, reason in plan.failed_allocations:
+        print(f"FAILED {task_id}: {reason}")
+
+MONITOR GPU CLUSTER
+─────────────────────────────────────────────────────────────────────────────
+from src.studio.gpu import MonitoredGPUCluster
+
+# Start monitoring
+cluster = MonitoredGPUCluster(poll_interval_sec=5.0)
+cluster.start()
+
+# Get health report
+health = cluster.get_health_report()
+if health.needs_rebalancing:
+    print(f"Rebalancing needed: {health.summary}")
+
+# Register callback
+def on_rebalance(report):
+    print(f"Overheated: {report.overheated_gpus}")
+    print(f"Underutilized: {report.underutilized_gpus}")
+
+cluster.register_rebalance_callback(on_rebalance)
+
+# Get metrics
+for i, gpu in enumerate(cluster.get_gpus()):
+    metrics = cluster.get_metrics(i)
+    if metrics:
+        print(f"GPU {i}: {metrics.avg_vram_utilization_pct():.1f}% util")
+
+# Stop gracefully
+cluster.stop()
+
+CONTEXT MANAGER (AUTO-CLEANUP)
+─────────────────────────────────────────────────────────────────────────────
+with MonitoredGPUCluster() as cluster:
+    gpus = cluster.get_gpus()
+    health = cluster.get_health_report()
+    # Auto-stops on exit
+
+CUSTOM MODEL PROFILE
+─────────────────────────────────────────────────────────────────────────────
+from src.studio.gpu import ModelVRAMProfile, ModelType
+
+profile = ModelVRAMProfile(
+    model_type=ModelType.CUSTOM,
+    vram_required_gb=12.0,
+    supports_sharding=True,
+    max_batch_size=2,
+    description="My custom model"
+)
+
+allocator.vram_registry.register(profile)
+
+allocation = allocator.allocate(
+    task_id="custom",
+    model_type=ModelType.CUSTOM,
+    gpus=gpus,
+)
+
+LIST DEFAULT PROFILES
+─────────────────────────────────────────────────────────────────────────────
+from src.studio.gpu import ModelVRAMRegistry
+
+registry = ModelVRAMRegistry()
+for profile in registry.list_profiles():
+    print(f"{profile.model_type.value}: {profile.vram_required_gb}GB")
+
+DEALLOCATE TASK
+─────────────────────────────────────────────────────────────────────────────
+allocator.deallocate("my-task")
+
+CHECK ALLOCATION
+─────────────────────────────────────────────────────────────────────────────
+allocation = allocator.get_allocation("my-task")
+if allocation:
+    print(f"Task on GPUs: {allocation.gpu_indices}")
+else:
+    print("Task not allocated")
+
+GET ALL ALLOCATIONS
+─────────────────────────────────────────────────────────────────────────────
+all_allocs = allocator.get_allocations()
+for task_id, allocation in all_allocs.items():
+    print(f"{task_id} -> {allocation.gpu_indices}")
+
+ENABLE DEBUG LOGGING
+─────────────────────────────────────────────────────────────────────────────
+from src.studio.utils import setup_logging
+
+setup_logging("DEBUG")  # INFO, DEBUG, WARNING, ERROR
+
+COMMON MODEL TYPES
+─────────────────────────────────────────────────────────────────────────────
+ModelType.SDXL_BASE         (6.5GB)
+ModelType.SDXL_REFINER      (4.5GB)
+ModelType.SDXL_LORA         (0.5GB)
+ModelType.SDXL_CONTROLNET   (2.0GB)
+ModelType.FLUX_DEV          (10GB)
+ModelType.FLUX_PRO          (20GB)
+ModelType.CLIP_VISION       (1.5GB)
+ModelType.FACE_DETECTION    (0.3GB)
+ModelType.FACE_RECOGNITION  (0.5GB)
+ModelType.UPSCALER          (2.0GB)
+ModelType.CUSTOM            (user-defined)
+
+GPU INFO PROPERTIES
+─────────────────────────────────────────────────────────────────────────────
+gpu.index                       GPU device index
+gpu.name                        GPU model name
+gpu.uuid                        Unique GPU UUID
+gpu.vram_total_gb              Total VRAM (GB)
+gpu.vram_used_gb               Used VRAM (GB)
+gpu.vram_free_gb               Free VRAM (GB)
+gpu.vram_utilization_pct       Utilization percent
+gpu.compute_capability_major   Compute capability (e.g., 8)
+gpu.compute_capability_minor   Compute capability (e.g., 0)
+gpu.power_draw_w               Current power draw (watts)
+gpu.power_limit_w              Power limit (watts)
+gpu.temperature_c              Temperature (Celsius)
+gpu.is_a100_80gb              True if A100 80GB
+gpu.is_a100_40gb              True if A100 40GB
+
+ALLOCATION PROPERTIES
+─────────────────────────────────────────────────────────────────────────────
+allocation.task_id              Task ID
+allocation.model_type           Model type
+allocation.gpu_indices          List of assigned GPU indices
+allocation.vram_required_gb     Required VRAM
+allocation.vram_allocated_gb    Allocated VRAM
+allocation.uses_sharding        Multi-GPU sharding used
+allocation.num_gpus             Number of GPUs assigned
+allocation.allocation_notes     Additional notes
+
+HEALTH REPORT PROPERTIES
+─────────────────────────────────────────────────────────────────────────────
+health.healthy_gpus             Number of healthy GPUs
+health.total_gpus               Total GPUs
+health.overheated_gpus          GPUs >= 85°C
+health.throttled_gpus           GPUs 75-85°C
+health.underutilized_gpus       GPUs < 5% utilization
+health.overutilized_gpus        GPUs >= 90% utilization
+health.needs_rebalancing        Rebalancing recommended
+health.summary                  Human-readable status
+
+METRICS BUFFER METHODS
+─────────────────────────────────────────────────────────────────────────────
+metrics_buf.get_history()
+metrics_buf.avg_vram_utilization_pct(last_n=5)
+metrics_buf.avg_temperature_c(last_n=5)
+metrics_buf.max_temperature_c(last_n=5)
+
+CONFIGURATION FILE
+─────────────────────────────────────────────────────────────────────────────
+Location: configs/gpu/default.yaml
+Sections:
+  - discovery: Fallback chain settings
+  - monitoring: Poll interval, history size, thresholds
+  - allocation: Model VRAM profiles
+  - rebalancing: Trigger conditions
+  - reservation: System overhead
+  - constraints: Min compute capability, min VRAM
+
+DOCUMENTATION
+─────────────────────────────────────────────────────────────────────────────
+Full guide:  docs/GPU_SYSTEM.md
+Examples:    examples/gpu_management_example.py
+Tests:       tests/test_gpu_system.py
+Config:      configs/gpu/default.yaml
+
+TROUBLESHOOTING
+─────────────────────────────────────────────────────────────────────────────
+No GPUs found?
+  → Check nvidia-smi: which nvidia-smi
+  → Install torch/pynvml as fallback
+  → Check CUDA_VISIBLE_DEVICES environment variable
+
+Allocation fails?
+  → Check available VRAM: gpu.vram_free_gb
+  → Try custom_vram_gb parameter
+  → Check if sharding is enabled for model
+
+Monitor issues?
+  → Call stop() to clean up threads
+  → Use context manager for auto-cleanup
+  → Check DEBUG logs for details
+
+Performance?
+  → Reduce poll_interval_sec to 2-3s for faster response
+  → Reduce history_size for smaller memory footprint
+  → Check CPU usage, typically 1-5% overhead
+
+IMPORTS CHEAT SHEET
+─────────────────────────────────────────────────────────────────────────────
+# Discovery
+from src.studio.gpu import GPUDiscovery, GPUInfo
+
+# Allocation
+from src.studio.gpu import (
+    GPUAllocator,
+    GPUAllocation,
+    AllocationPlan,
+    ModelType,
+    ModelVRAMProfile,
+    ModelVRAMRegistry,
+)
+
+# Monitoring
+from src.studio.gpu import (
+    GPUMonitor,
+    MonitoredGPUCluster,
+    GPUMetrics,
+    MetricsBuffer,
+    HealthReport,
+)
+
+# Utilities
+from src.studio.utils import setup_logging, get_logger
+
+================================================================================

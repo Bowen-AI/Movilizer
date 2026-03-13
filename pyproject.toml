@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "movilizer-studio"
-version = "0.2.0"
-description = "Movilizer generative movie studio: local debug + server orchestration, model sync, training, generation, evaluation, and AI command control"
+version = "0.3.0"
+description = "Movilizer autonomous AI movie studio: continuous generation with multi-agent critique, model auto-discovery, GPU management, and Netflix-like distribution"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
@@ -19,9 +19,18 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-server = ["fastapi>=0.115", "uvicorn>=0.30", "pydantic>=2.7"]
+server = ["fastapi>=0.115", "uvicorn>=0.30", "pydantic>=2.7", "aiofiles>=23.2"]
 models = ["huggingface_hub>=0.24"]
 ml = ["torch>=2.1", "diffusers>=0.27", "accelerate>=0.27", "transformers>=4.38"]
+gpu = ["pynvml>=11.5"]
+video_gen = ["torch>=2.1", "diffusers>=0.30", "accelerate>=0.27", "transformers>=4.40"]
+audio_gen = ["TTS>=0.22", "audiocraft>=1.3"]
+upscale = ["realesrgan>=0.3", "basicsr>=1.4"]
+llm = ["vllm>=0.4", "transformers>=4.40"]
+critics = ["vllm>=0.4", "transformers>=4.40"]
+full = [
+  "movilizer-studio[server,models,ml,gpu,video_gen,audio_gen,upscale,llm]",
+]
 
 [tool.setuptools]
 package-dir = {"" = "src"}

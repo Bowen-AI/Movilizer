@@ -1,0 +1,55 @@
+# Movilizer Movie Studio Daemon Configuration
+# This file controls the behavior of the autonomous daemon
+
+# State persistence
+state_file: "state/daemon_state.json"
+
+# Concurrency settings
+max_concurrent_tasks: 2
+max_concurrent_generations: 1
+max_concurrent_critiques: 1
+
+# Generation settings
+enable_story_generation: true
+enable_video_generation: true
+generation_timeout_seconds: 3600  # 1 hour timeout per movie
+
+# Critique settings
+enable_auto_critique: true
+critique_interval_percent: 25  # Check critique after 25% progress
+critique_min_quality_threshold: 7.5  # 0-10 scale
+max_revision_attempts: 3
+
+# Analytics feedback
+enable_analytics_feedback: true
+analytics_update_frequency_seconds: 3600  # Hourly
+
+# Model discovery
+model_discovery_enabled: true
+model_discovery_interval_seconds: 86400  # Daily
+
+# Health monitoring
+health_check_interval_seconds: 300  # Every 5 minutes
+gpu_monitoring_enabled: true
+memory_threshold_percent: 85  # Alert if GPU memory > 85%
+
+# Publishing settings
+auto_publish_on_completion: true
+publish_to_website: true
+generate_hls_streaming: true
+
+# Logging
+log_level: "INFO"
+log_file: "logs/daemon.log"
+log_max_size_mb: 100
+log_backup_count: 10
+
+# Performance tuning
+task_queue_max_size: 1000
+state_save_interval_seconds: 60
+metrics_collection_interval_seconds: 300
+
+# Feature flags
+enable_experimental_models: false
+enable_batch_processing: false
+enable_distributed_generation: false

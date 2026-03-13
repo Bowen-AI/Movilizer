@@ -1,0 +1,198 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-movilizer-dark text-white font-sans;
+  background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-movilizer-gray;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-movilizer-red rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-red-700;
+}
+
+/* Smooth transitions */
+a, button {
+  @apply transition-all duration-200;
+}
+
+/* Movie card hover effects */
+.movie-card {
+  @apply transform transition-transform duration-300;
+}
+
+.movie-card:hover {
+  @apply scale-105;
+}
+
+/* Play button animation */
+.play-button {
+  @apply flex items-center justify-center w-12 h-12 rounded-full bg-white bg-opacity-80 hover:bg-opacity-100 transition-all;
+}
+
+.play-button:hover {
+  @apply scale-110;
+}
+
+/* Gradient text effect */
+.gradient-text {
+  background: linear-gradient(135deg, #e50914 0%, #f5003c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Hero section background */
+.hero-bg {
+  background: linear-gradient(
+    rgba(0, 0, 0, 0.5),
+    rgba(0, 0, 0, 0.8)
+  );
+}
+
+/* Row separator */
+.row-separator {
+  @apply h-px bg-gradient-to-r from-transparent via-movilizer-red to-transparent opacity-30 my-8;
+}
+
+/* Fade overlay for bottom of images */
+.fade-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(transparent, rgba(15, 15, 15, 1));
+}
+
+/* Loading skeleton */
+.skeleton {
+  @apply animate-pulse;
+  background: linear-gradient(
+    90deg,
+    #221f1f 0%,
+    #3a3a3a 50%,
+    #221f1f 100%
+  );
+  background-size: 200% 100%;
+  animation: loading 2s infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Video player styles */
+.video-player-container {
+  @apply relative w-full bg-black;
+  aspect-ratio: 16 / 9;
+}
+
+.video-player-container video {
+  @apply w-full h-full;
+}
+
+/* Modal/Overlay */
+.modal-overlay {
+  @apply fixed inset-0 bg-black bg-opacity-75 z-40;
+  animation: fadeIn 0.2s ease-in;
+}
+
+.modal-content {
+  @apply relative z-50;
+}
+
+/* Button styles */
+.btn-primary {
+  @apply px-6 py-2 bg-movilizer-red hover:bg-red-700 rounded font-semibold text-white transition-colors;
+}
+
+.btn-secondary {
+  @apply px-6 py-2 border border-white hover:bg-white hover:text-black rounded font-semibold transition-colors;
+}
+
+.btn-ghost {
+  @apply px-4 py-2 hover:bg-white hover:bg-opacity-10 rounded transition-colors;
+}
+
+/* Genre badge */
+.genre-badge {
+  @apply inline-block px-3 py-1 bg-movilizer-red bg-opacity-70 rounded text-sm font-semibold;
+}
+
+/* Rating display */
+.rating-display {
+  @apply flex items-center gap-1;
+}
+
+.rating-star {
+  @apply text-movilizer-red;
+}
+
+/* Text truncation */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Responsive grid for movies */
+@media (max-width: 640px) {
+  .movie-grid {
+    @apply grid-cols-2;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .movie-grid {
+    @apply grid-cols-3;
+  }
+}
+
+@media (min-width: 1025px) {
+  .movie-grid {
+    @apply grid-cols-4;
+  }
+}
+
+/* Smooth page transitions */
+.page-transition {
+  animation: slideUp 0.5s ease-out;
+}

@@ -1,0 +1,176 @@
+Metadata-Version: 2.4
+Name: movilizer-studio
+Version: 0.2.0
+Summary: Movilizer generative movie studio: local debug + server orchestration, model sync, training, generation, evaluation, and AI command control
+Author: Codex
+License: MIT
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: PyYAML>=6.0
+Requires-Dist: Jinja2>=3.1
+Requires-Dist: jsonschema>=4.20
+Requires-Dist: numpy>=1.24
+Requires-Dist: Pillow>=10.0
+Provides-Extra: server
+Requires-Dist: fastapi>=0.115; extra == "server"
+Requires-Dist: uvicorn>=0.30; extra == "server"
+Requires-Dist: pydantic>=2.7; extra == "server"
+Provides-Extra: models
+Requires-Dist: huggingface_hub>=0.24; extra == "models"
+Provides-Extra: ml
+Requires-Dist: torch>=2.1; extra == "ml"
+Requires-Dist: diffusers>=0.27; extra == "ml"
+Requires-Dist: accelerate>=0.27; extra == "ml"
+Requires-Dist: transformers>=4.38; extra == "ml"
+
+# Movilizer Generative Movie Studio
+
+A local-first, server-capable repository for movie-grade generative production:
+- SDXL identity/style LoRA training,
+- batched multi-project image+video generation,
+- dialog voice + music + mix + final MP4 packaging,
+- modular judges and self-evolving optimization loops,
+- non-destructive scene/shot patch tweaks,
+- Slurm jobs (2x80GB GPUs),
+- natural-language AI command interface.
+
+## What is available now
+
+1. Local debug mode
+- Fast iteration profile via `configs/run/local_debug.yaml`.
+- Use low resolution/fps/steps while preserving pipeline behavior.
+
+2. Server mode
+- `studio.server` FastAPI app with endpoints for:
+  - run orchestration,
+  - AI plan/execute,
+  - model list/pull/push.
+
+3. Model retrieval and publishing
+- Pull from local path or Hugging Face repo into local model cache.
+- Push from local model folder to local path or Hugging Face repo.
+- CLI: `python -m studio.model_registry ...`
+
+4. Generic movie project baseline
+- `projects/feature_film_demo` is the default movie-oriented sample.
+- Previous sample (`my_makeover`) remains available as legacy reference.
+
+5. Multi prompt-image/video references
+- Supported across workspace/project/scene/shot levels.
+- Also supported via `shot.references.prompt_images[]` and `shot.references.prompt_videos[]`.
+
+## Local setup (conda)
+
+```bash
+conda env create -f environment.yml
+conda activate movilizer
+pip install -e .
+```
+
+## Quickstart
+
+### 1) Local debug run
+
+```bash
+python -m studio.run \
+  --workspace workspace.yaml \
+  --run_config configs/run/local_debug.yaml \
+  --projects feature_film_demo \
+  --scenes all \
+  --resume
+```
+
+### 2) Full-quality run profile
+
+```bash
+python -m studio.run --workspace workspace.yaml --projects feature_film_demo --scenes all --resume
+```
+
+### 3) Compile only
+
+```bash
+python -m studio.run --workspace workspace.yaml --project feature_film_demo --scene scene_001_opening --compile_only
+```
+
+### 4) AI command prompt interface
+
+```bash
+python -m studio.ai --workspace workspace.yaml --project feature_film_demo --scene scene_001_opening \
+  "make shot_001 more cinematic and regenerate frames 48-120"
+```
+
+### 5) Model registry sync
+
+```bash
+# Pull model from HF to local cache
+python -m studio.model_registry pull --source stabilityai/stable-diffusion-xl-base-1.0
+
+# Push local model folder to HF repo
+python -m studio.model_registry push --source_dir models/cache/stabilityai__stable-diffusion-xl-base-1.0 --target your-org/your-model
+
+# Push local model folder to local destination
+python -m studio.model_registry push --source_dir models/cache/stabilityai__stable-diffusion-xl-base-1.0 --target /tmp/model_export
+```
+
+### 6) Server mode
+
+```bash
+python -m studio.server --config configs/server/default.yaml
+```
+
+Example requests:
+
+```bash
+curl http://127.0.0.1:8080/health
+
+curl -X POST http://127.0.0.1:8080/models/pull \
+  -H 'content-type: application/json' \
+  -d '{"source":"stabilityai/stable-diffusion-xl-base-1.0"}'
+
+curl -X POST http://127.0.0.1:8080/run \
+  -H 'content-type: application/json' \
+  -d '{"projects":["feature_film_demo"],"scenes":["scene_001_opening"],"run_config":"configs/run/local_debug.yaml"}'
+```
+
+## Output layout
+
+- Shot: `outputs/<run_id>/<project>/<scene>/<shot>/...`
+- Scene: `outputs/<run_id>/<project>/<scene>/scene.mp4`
+- Project final: `outputs/<run_id>/<project>/final.mp4`
+- Eval: `outputs/eval/<run_id>/...`
+
+## Slurm
+
+- `slurm/train_identity_2gpu.sbatch`
+- `slurm/run_studio_2gpu.sbatch`
+- `slurm/eval.sbatch`
+- `slurm/evolve.sbatch`
+
+## Documentation
+
+Human docs:
+- `docs/HUMAN/PROJECTS.md`
+- `docs/HUMAN/SCENES.md`
+- `docs/HUMAN/TWEAKS.md`
+- `docs/HUMAN/PIPELINE.md`
+- `docs/HUMAN/SLURM.md`
+- `docs/HUMAN/SERVER.md`
+- `docs/HUMAN/AUDIO.md`
+- `docs/HUMAN/VIDEO.md`
+- `docs/HUMAN/JUDGES.md`
+- `docs/HUMAN/TROUBLESHOOTING.md`
+- `docs/HUMAN/SAFETY.md`
+
+AI docs:
+- `docs/AI/*.schema.json`
+- `docs/AI/PLAYBOOK.md`
+- `docs/AI/COMMANDS.md`
+- `docs/AI/EXAMPLES/`
+
+## Graceful fallback behavior
+
+When optional components are unavailable:
+- generation uses synthetic frame fallback,
+- training uses mock LoRA artifact fallback,
+- advanced judges stay heuristic,
+- server/model sync endpoints return actionable failure messages.

@@ -1,0 +1,121 @@
+# GPU Resource Management Configuration
+
+# GPU Discovery
+discovery:
+  # Try discovery methods in this order
+  # Methods: nvidia-smi, torch_cuda, pynvml
+  # nvidia-smi is most reliable (works without Python deps)
+  preferred_methods:
+    - nvidia-smi
+    - torch_cuda
+    - pynvml
+
+# GPU Monitoring
+monitoring:
+  # Polling interval in seconds
+  poll_interval_sec: 5.0
+  # Number of historical samples to keep per GPU
+  history_size: 120
+  # Temperature thresholds (Celsius)
+  temp_warning_c: 75.0
+  temp_critical_c: 85.0
+  # Utilization thresholds (percent)
+  util_idle_pct: 5.0
+  util_high_pct: 90.0
+
+# GPU Allocation
+allocation:
+  # Model VRAM requirements (GB)
+  models:
+    sdxl_base:
+      vram_gb: 6.5
+      max_batch_size: 1
+      supports_sharding: true
+      description: SDXL Base 1.0 fp32
+
+    sdxl_refiner:
+      vram_gb: 4.5
+      max_batch_size: 1
+      supports_sharding: true
+      description: SDXL Refiner 1.0 fp32
+
+    sdxl_lora:
+      vram_gb: 0.5
+      max_batch_size: 1
+      supports_sharding: false
+      description: SDXL LoRA adapter
+
+    sdxl_controlnet:
+      vram_gb: 2.0
+      max_batch_size: 1
+      supports_sharding: true
+      description: SDXL ControlNet adapter
+
+    flux_dev:
+      vram_gb: 10.0
+      max_batch_size: 1
+      supports_sharding: true
+      description: FLUX Dev (bf16)
+
+    flux_pro:
+      vram_gb: 20.0
+      max_batch_size: 1
+      supports_sharding: true
+      description: FLUX Pro (fp8 quantized)
+
+    clip_vision:
+      vram_gb: 1.5
+      max_batch_size: 4
+      supports_sharding: false
+      description: CLIP Vision encoder
+
+    face_detection:
+      vram_gb: 0.3
+      max_batch_size: 32
+      supports_sharding: false
+      description: Face detection model
+
+    face_recognition:
+      vram_gb: 0.5
+      max_batch_size: 16
+      supports_sharding: false
+      description: Face recognition/embedding model
+
+    upscaler:
+      vram_gb: 2.0
+      max_batch_size: 2
+      supports_sharding: true
+      description: Image upscaler (RealESRGAN)
+
+# Rebalancing
+rebalancing:
+  # Enable automatic rebalancing
+  enabled: true
+  # Trigger rebalancing when these conditions are met
+  triggers:
+    # Rebalance if any GPU temperature >= critical threshold
+    on_thermal_critical: true
+    # Rebalance if significant utilization skew detected
+    on_utilization_skew: true
+    # Min % difference to trigger skew rebalancing
+    skew_threshold_pct: 50.0
+
+  # Rebalancing strategy
+  strategy: "best_fit"  # best_fit | even_spread | least_loaded
+  # Max tasks to rebalance in one operation
+  max_rebalance_tasks: 10
+
+# Resource reservation
+reservation:
+  # Always reserve this much VRAM per GPU for system/overhead (GB)
+  system_vram_gb: 0.5
+  # Percentage of total VRAM to reserve as buffer
+  buffer_pct: 5.0
+
+# Constraints
+constraints:
+  # Enforce minimum compute capability (major.minor)
+  # Common values: 7.0=V100/A100, 8.0=A100, 8.6=RTX30xx/40xx
+  min_compute_capability: 7.0
+  # Ignore GPUs smaller than this (GB)
+  min_vram_gb: 4.0
