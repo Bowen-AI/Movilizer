@@ -107,6 +107,20 @@ curl -X POST http://127.0.0.1:8080/run \
   -d '{"projects":["feature_film_demo"],"scenes":["scene_001_opening"],"run_config":"configs/run/local_debug.yaml"}'
 ```
 
+
+## PR artifact video (automatic)
+
+Every pull request now generates a sample MP4 and uploads it as a GitHub Actions artifact:
+
+- Workflow: `.github/workflows/pr-sample-video-artifact.yml`
+- Artifact name: `sample-prototype-video`
+- File: `artifacts/sample_prototype_pr.mp4`
+
+How to view/download:
+1. Open the PR on GitHub.
+2. Open the **Checks** tab and click **PR Sample Video Artifact** workflow run.
+3. Download `sample-prototype-video` from the run's **Artifacts** section.
+
 ## Output layout
 
 - Shot: `outputs/<run_id>/<project>/<scene>/<shot>/...`
