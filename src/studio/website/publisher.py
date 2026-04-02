@@ -103,8 +103,18 @@ class MoviePublisher:
             if trailer_path.exists():
                 movie_data.trailer_url = f'/media/{movie_data.id}/trailer.mp4'
 
-            # Set video URL to HLS stream
-            movie_data.video_url = f'/media/{movie_data.id}/hls/stream.m3u8'
+            # Prefer HLS stream when available; otherwise fallback to MP4
+            hls_playlist = hls_dir / 'stream.m3u8'
+            hls_mp4_fallback = hls_dir / 'stream.mp4'
+            if hls_playlist.exists():
+                movie_data.video_url = f'/media/{movie_data.id}/hls/stream.m3u8'
+            elif hls_mp4_fallback.exists():
+                movie_data.video_url = f'/media/{movie_data.id}/hls/stream.mp4'
+            else:
+                # Last-resort direct source copy if conversion/copy failed
+                direct_video = movie_dir / video_path.name
+                shutil.copy2(video_path, direct_video)
+                movie_data.video_url = f'/media/{movie_data.id}/{video_path.name}'
 
             # Update movies database
             self._add_to_movies_db(movie_data)
